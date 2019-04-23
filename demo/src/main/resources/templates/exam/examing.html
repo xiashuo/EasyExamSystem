@@ -1,0 +1,329 @@
+﻿<!DOCTYPE html5shiv>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:text-align="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta charset="utf-8" />
+	<title>考试进行中</title>
+	<meta name="keywords" content="Bootstrap模版,Bootstrap模版下载,Bootstrap教程,Bootstrap中文" />
+	<meta name="description" content="站长素材提供Bootstrap模版,Bootstrap教程,Bootstrap中文翻译等相关Bootstrap插件下载" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<!-- basic styles -->
+
+	<link href="/css/bootstrap.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="/css/font-awesome.min.css" />
+
+	<!--[if IE 7]>
+		  <link rel="stylesheet" href="/css/font-awesome-ie7.min.css" />
+		<![endif]-->
+
+	<!-- page specific plugin styles -->
+
+	<!-- ace styles -->
+
+	<link rel="stylesheet" href="/css/ace.min.css" />
+	<link rel="stylesheet" href="/css/ace-rtl.min.css" />
+	<link rel="stylesheet" href="/css/ace-skins.min.css" />
+
+	<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="/css/ace-ie.min.css" />
+		<![endif]-->
+
+	<!-- inline styles related to this page -->
+
+	<!-- ace settings handler -->
+
+	<script src="/js/ace-extra.min.js"></script>
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+
+	<!--[if lt IE 9]>
+	<script src="/js/html5shiv.js"></script>
+	<script src="/js/respond.min.js"></script>
+		<![endif]-->
+	<script type="text/javascript">
+		var b = 0
+		var c = 0
+		var flag = 0
+		var t
+
+		function jishi() {
+			if (flag == 0) {
+				xs.value = 0;
+				flag = 1;
+			}
+			c = c + 1
+			t = setTimeout("jishi()", 1000)
+			if (60 == c) {
+				c = 0;
+				b = b + 1;
+				xs.value = b
+			}
+			document.getElementById('tt').value = c
+		}
+	</script>
+
+	<style>
+		#nav {
+			text-align: center;
+			float: right;
+		}
+
+		#nav1 {
+			text-align: center;
+			/*float: center;*/
+		}
+
+		.input {
+			background-color: #ffffff;
+			width: 40px;
+			border: none;
+			color: red;
+			text-align: center;
+			font-size: 24px;
+		}
+	</style>
+</head>
+
+<body onLoad="jishi()">
+	<div class="navbar navbar-default" id="navbar">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('navbar', 'fixed')
+			} catch (e) {}
+		</script>
+
+		<div class="navbar-container" id="navbar-container">
+			<div class="navbar-header pull-left">
+				<a href="#" class="navbar-brand">
+					<small>
+						<i class="icon-leaf"></i>
+						在线笔试系统
+					</small>
+				</a><!-- /.brand -->
+			</div><!-- /.navbar-header -->
+
+		</div><!-- /.container -->
+	</div>
+
+	<div class="main-container" id="main-container">
+		<script type="text/javascript">
+			try {
+				ace.settings.check('main-container', 'fixed')
+			} catch (e) {}
+		</script>
+
+		<div class="main-container-inner">
+			<a class="menu-toggler" id="menu-toggler" href="#">
+				<span class="menu-text"></span>
+			</a>
+
+			<div class="sidebar" id="sidebar">
+				<script type="text/javascript">
+					try {
+						ace.settings.check('sidebar', 'fixed')
+					} catch (e) {}
+				</script>
+
+				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+
+					</div>
+
+					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+						<span class="btn btn-success"></span>
+
+						<span class="btn btn-info"></span>
+
+						<span class="btn btn-warning"></span>
+
+						<span class="btn btn-danger"></span>
+					</div>
+				</div><!-- #sidebar-shortcuts -->
+
+				<ul class="nav nav-list">
+					<li class="active">
+						<a href="#">
+							<i class="icon-dashboard"></i>
+							<span class="menu-text"> 笔试页面 </span>
+						</a>
+					</li>
+
+
+				</ul><!-- /.nav-list -->
+
+				<div class="sidebar-collapse" id="sidebar-collapse">
+					<i class="icon-double-angle-left" data-icon1="icon-double-angle-left"
+						data-icon2="icon-double-angle-right"></i>
+				</div>
+
+				<script type="text/javascript">
+					try {
+						ace.settings.check('sidebar', 'collapsed')
+					} catch (e) {}
+				</script>
+			</div>
+
+			<div class="main-content">
+				<div class="page-content">
+					<div class="page-header" style="height: 46px;padding-bottom: 1px;">
+
+						<h1>
+							<div class='col-xs-4 col-sm-5'>
+								<span>笔试进行中</span>
+								<small>
+									<i class="icon-double-angle-right"></i>
+								</small>
+							</div>
+
+
+
+							<div text-align:center class='col-xs-4 col-sm-2'><span>姓名：<label id="name" style = "color:red;font-size: 22px;width: 110px" name="name" th:text="${candidate.name}"/></span></div>
+
+							<div class='col-xs-4 col-sm-5' id="nav">
+								<span>已作答<input id="xs" class="input">分<input id="tt" class="input">秒</span>
+							</div>
+						</h1>
+
+
+					</div><!-- /.page-header -->
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+
+							<form class="form-horizontal" role="form" action="/exam/examing/submitExam" method="post">
+
+
+								<input id="id" name="id" th:value="${candidate.id}" hidden />
+								<div class="space-4"></div>
+								<div class="space-4"></div>
+								<div class="space-4"></div>
+								<div class="space-4"></div>
+								<div class="space-4"></div>
+								<div class="space-4"></div>
+								<div class="space-4"></div>
+								<div class="space-4"></div>
+								<div class="space-4"></div>
+								<div class="space-4"></div>
+								<div class="space-4"></div>
+								<div class="space-4"></div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right"
+										for="question">笔试题</label>
+
+									<div class="col-sm-9">
+										<textarea class="form-control" id="question"
+											style="width:60%;height:15%;font-size:15px"
+											placeholder="笔试题" th:text="${candidate.question}" disabled></textarea>
+									</div>
+								</div>
+
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="answer">解答</label>
+
+									<div class="col-sm-9">
+										<textarea class="form-control" id="answer"
+											style="width:60%;height:35%;font-size:15px;"
+											placeholder="请填写答案"></textarea>
+									</div>
+								</div>
+
+								<div class="space-4"></div>
+
+
+
+
+
+
+								<div class="clearfix form-actions">
+									<div class="col-md-offset-3 col-md-9">
+
+
+										<button class="btn btn-info" type="submit">
+											<i class="icon-ok bigger-110"></i>
+											提交
+										</button>
+
+
+									</div>
+								</div>
+
+								<div class="hr hr-24"></div>
+							</form>
+
+
+
+
+						</div><!-- PAGE CONTENT ENDS -->
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div>
+		</div><!-- /.page-content -->
+	</div><!-- /.main-content -->
+
+
+
+
+
+	</div><!-- /#ace-settings-container -->
+	</div><!-- /.main-container-inner -->
+
+	<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+		<i class="icon-double-angle-up icon-only bigger-110"></i>
+	</a>
+	</div><!-- /.main-container -->
+
+	<!-- basic scripts -->
+
+	<!--[if !IE]> -->
+
+	<script type="text/javascript">
+		window.jQuery || document.write("<script src='/js/jquery-2.0.3.min.js'>" + "<" + "/script>");
+	</script>
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+</script>
+<![endif]-->
+
+	<script type="text/javascript">
+		if ("ontouchend" in document) document.write("<script src='/js/jquery.mobile.custom.min.js'>" + "<" +
+			"/script>");
+	</script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/typeahead-bs2.min.js"></script>
+
+	<!-- page specific plugin scripts -->
+
+	<script src="/js/bootstrap-tag.min.js"></script>
+	<script src="/js/jquery.hotkeys.min.js"></script>
+	<script src="/js/bootstrap-wysiwyg.min.js"></script>
+	<script src="/js/jquery-ui-1.10.3.custom.min.js"></script>
+	<script src="/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="/js/jquery.slimscroll.min.js"></script>
+
+	<!-- ace scripts -->
+
+	<script src="/js/ace-elements.min.js"></script>
+	<script src="/js/ace.min.js"></script>
+
+	<!-- inline scripts related to this page -->
+
+	<script type="text/javascript">
+
+	</script>
+	<script type="text/javascript">
+		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+		document.write(unescape("%3Cscript src='" + _bdhmProtocol +
+			"hm.baidu.com/h.js%3Fe9e1d61340ff3d9495a8cca04ebdb49d' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+
+</body>
+
+</html>

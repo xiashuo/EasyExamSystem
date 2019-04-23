@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/exam")
@@ -44,13 +43,13 @@ public class examController {
             Candidate candidate=new Candidate();
             candidate=list.get(0);
             if (candidate.getState().equals("已完成")){
-                return "redirect:/exam/examing/completed";
+                return "/exam/examfinish";
             }
             candidate.setState("进行中");
             candidate.setOperition("查看");
             candidateRepository.save(candidate);
             model.addAttribute("candidate", candidate);
-            return "exam/examing";
+            return "/exam/examing";
         }
         return "/404";
     }
@@ -61,13 +60,9 @@ public class examController {
         candidate.setState("已完成");
         candidate.setOperition("回看");
         candidateRepository.save(candidate);
-        return "redirect:/exam/examing/completed";
+        return "/exam/examfinish";
     }
-    @RequestMapping("examing/completed")
-    @ResponseBody
-    public String Completed(){
-        return "你已完成作答！";
-    }
+
     @RequestMapping("/Operation")
     public String Operation(@RequestParam("id") Integer id,@RequestParam("name") String name,@RequestParam("question") String question,@RequestParam("operation") String operation,Model model){
         if(operation.equals("编辑")){

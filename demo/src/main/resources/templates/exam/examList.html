@@ -169,22 +169,24 @@
 								<div class="col-xs-12">
 									<div class="table-responsive">
 										<table id="test"
-											class="table table-striped table-bordered table-hover">
+											class="table table-striped table-bordered table-hover" style = "text-align:center">
 											<thead>
 												<tr>
 
-													<th>序号</th>
-													<th>笔试者</th>
-													<th class="hidden-480">状态</th>
-													<th class="hidden-480">操作</th>
+													<th style = "text-align:center">编号</th>
+													<th style = "text-align:center">笔试者</th>
+													<th style = "text-align:center">笔试链接</th>
+													<th class="hidden-480" style = "text-align:center">状态</th>
+													<th class="hidden-480" style = "text-align:center">操作</th>
 
 
 												</tr>
 												<tr th:each="candidate:${list}">
 													<td th:text="${candidate.id}"></td>
 													<td th:text="${candidate.name}"></td>
+													<td th:text="${candidate.url}"></td>
 													<td th:text="${candidate.state}"></td>
-													<td><a th:href="@{/exam/Operation(id=${candidate.id},name=${candidate.name},question=${candidate.question},operation=${candidate.operition})}" th:text="${candidate.operition}"></a></td>
+													<td><a th:href="@{/exam/Operation(id=${candidate.id},name=${candidate.name},url=${candidate.url},question=${candidate.question},operation=${candidate.operition})}" th:text="${candidate.operition}"></a></td>
 												</tr>
 
 											</thead>

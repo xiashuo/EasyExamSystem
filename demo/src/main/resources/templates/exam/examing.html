@@ -8,6 +8,39 @@
 	<meta name="description" content="站长素材提供Bootstrap模版,Bootstrap教程,Bootstrap中文翻译等相关Bootstrap插件下载" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+	<script src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.js"></script>
+
+	<script type="text/javascript">
+		var events_all = [];
+		var events_latest=[];
+		console.log(rrweb);
+		rrweb.record({
+			emit(event) {
+				// 将 event 存入 events 数组中
+				events_all.push(event);
+				events_latest.push(event);
+			},
+		});
+
+		// save 函数用于将 events 发送至后端存入，并重置 events 数组
+		function save() {
+			var id=document.getElementById("id").value;
+			const body = JSON.stringify({"candidateId":id,"events_all":events_all,"events_latest":events_latest});
+			events_latest=[]
+			fetch('http://localhost:8080/exam/examing/record', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body,
+			});
+			console.log(body);
+			console.log(id)
+		}
+		// 每 5 秒调用一次 save 方法，避免请求过多
+		setInterval(save, 5*1000);
+	</script>
+
 	<!-- basic styles -->
 
 	<link href="/css/bootstrap.min.css" rel="stylesheet" />
@@ -177,8 +210,7 @@
 							</div>
 
 
-
-							<div text-align:center class='col-xs-4 col-sm-2'><span>姓名：<label id="name" style = "color:red;font-size: 22px;width: 110px" name="name" th:text="${candidate.name}"/></span></div>
+							<div text-align:center class='col-xs-4 col-sm-2'><span>姓名：<label id="name" style = "color:red;font-size: 22px;width: 100px" name="name" th:text="${candidate.name}"/></span></div>
 
 							<div class='col-xs-4 col-sm-5' id="nav">
 								<span>已作答<input id="xs" class="input">分<input id="tt" class="input">秒</span>
@@ -318,11 +350,7 @@
 	<script type="text/javascript">
 
 	</script>
-	<script type="text/javascript">
-		var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-		document.write(unescape("%3Cscript src='" + _bdhmProtocol +
-			"hm.baidu.com/h.js%3Fe9e1d61340ff3d9495a8cca04ebdb49d' type='text/javascript'%3E%3C/script%3E"));
-	</script>
+
 
 </body>
 

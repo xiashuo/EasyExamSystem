@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/mvc">
+<head>
+    <meta charset="UTF-8">
+    <title>实时查看</title>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.css"
+/>
+    <script src="https://cdn.jsdelivr.net/npm/rrweb@latest/dist/rrweb.min.js"></script>
+
+
+</head>
+<body onload="play()">
+<script th:inline="javascript">
+    var candidateId=[[${id}]];
+    var i=0;
+    var replayer=null;
+    function play() {
+        console.log("test");
+        var opts = {
+            method:"GET"
+        }
+        var url='http://localhost:8080/exam/examing/play_real_time?id='+candidateId;
+        $.ajax({
+            type: "GET",
+            url: url, //访问的链接
+            dataType: 'text',
+            success:function(res){  //成功的回调函数
+                var events = JSON.parse(res);
+                if (i==0){
+                    replayer = new rrweb.Replayer(events);
+                    replayer.play();
+                    i=i+1;
+                }
+                replayer.on(events);
+
+
+
+            },
+            error: function (e) {
+                console.log("error");
+            }
+        });
+
+
+    }
+    setInterval(play,5*1000);
+
+</script>
+
+</body>
+</html>

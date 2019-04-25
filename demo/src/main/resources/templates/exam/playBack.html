@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/mvc">
+
+<head>
+    <meta charset="utf-8" />
+    <title>笔试回放</title>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/rrweb-player@latest/dist/style.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/rrweb-player@latest/dist/index.js"></script>
+
+</head>
+
+<body onload="play()">
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <script th:inline="javascript">
+            var candidateId=[[${id}]]
+            function play() {
+                console.log("test");
+                var opts = {
+                    method:"GET"
+                }
+                var url='http://localhost:8080/exam/examing/playBack?id='+candidateId;
+                $.ajax({
+                    type: "GET",
+                    url: url, //访问的链接
+                    dataType: 'text',
+                    success:function(res){  //成功的回调函数
+                        var events = JSON.parse(res);
+
+                        new rrwebPlayer({
+                            target: document.body, // 可以自定义 DOM 元素
+                            data: {
+                                events,
+                            },
+                        });
+                        // const replayer = new rrweb.Replayer(events);
+                        // replayer.play();
+                    },
+                    error: function (e) {
+                        console.log("error");
+                    }
+                });
+
+            }
+        </script>
+
+    </div><!-- PAGE CONTENT ENDS -->
+</div><!-- /.col -->
+
+
+
+</body>
+
+</html>

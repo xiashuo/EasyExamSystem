@@ -1,16 +1,22 @@
 package examsystem.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import examsystem.dao.CandidateRepository;
+import examsystem.dao.RecordRepository;
 import examsystem.entity.Candidate;
+import examsystem.entity.Record;
+import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/exam")
@@ -26,9 +32,9 @@ public class examController {
         Candidate candidate=new Candidate();
         candidate.setName(username);
         candidate.setQuestion(question);
-        String[] ss=url.split("/");
-        String md5=ss[ss.length-1];
-        candidate.setUrl(md5);
+//        String[] ss=url.split("/");
+//        String md5=ss[ss.length-1];
+        candidate.setUrl(url);
         candidate.setState("未开始");
         candidate.setOperition("编辑");
         candidateRepository.save(candidate);
@@ -64,17 +70,38 @@ public class examController {
     }
 
     @RequestMapping("/Operation")
-    public String Operation(@RequestParam("id") Integer id,@RequestParam("name") String name,@RequestParam("question") String question,@RequestParam("operation") String operation,Model model){
+    public String Operation(@RequestParam("id") Integer id,@RequestParam("name") String name,@RequestParam("question") String question,@RequestParam("operation") String operation,@RequestParam("url") String url,Model model){
         if(operation.equals("编辑")){
             model.addAttribute("id",id);
             model.addAttribute("name",name);
             model.addAttribute("question",question);
+            model.addAttribute("url",url);
             return "/exam/editExam";
         }
-        if(operation.equals("查看")){
-            return "404";
+        else if(operation.equals("查看")){
+            model.addAttribute("id",id);
+            return "/exam/play_real_time";
         }
-        return "404";
+        else {
+            model.addAttribute("id",id);
+            return "/exam/playBack";
+        }
+
+    }
+    @RequestMapping("/examing/playBack")
+    @ResponseBody
+    public JSONArray playBack(@RequestParam("id") Integer candidateId){
+        Record record=recordRepository.findByCandidateId(candidateId);
+        if (record==null){
+            return null;
+        }
+        JSONArray events_all=record.getEvents_all();
+        return events_all;
+    }
+    @RequestMapping("/playError")
+    @ResponseBody
+    public String playError(){
+        return "播放错误或文件不存在！";
     }
     @RequestMapping("/editExam")
     public String editExam(@RequestParam("id") Integer id,@RequestParam("username") String username,@RequestParam("question") String question,@RequestParam String url){
@@ -82,22 +109,49 @@ public class examController {
         candidate=candidateRepository.findById(id);
         candidate.setName(username);
         candidate.setQuestion(question);
-        String[] ss=url.split("/");
-        String md5=ss[ss.length-1];
-        candidate.setUrl(md5);
+//        String[] ss=url.split("/");
+//        String md5=ss[ss.length-1];
+        candidate.setUrl(url);
         candidateRepository.save(candidate);
         System.out.println("笔试已修改");
         return "redirect:/examList";
     }
-//    @RequestMapping("/test")
-//    @ResponseBody
-//    public String test(){
-//        Candidate c=new Candidate();
-//        c.setId(2);
-//        c.setName("xiashuo");
-//        c.setQuestion("随便写");
-//        candidateRepository.save(c);
-//        return "test";
-//    }
+    @Autowired
+    RecordRepository recordRepository;
+    @RequestMapping("/examing/record")
+    @ResponseBody
+    public String Record(@RequestBody JSONObject body){
+        Integer candidateId= Integer.valueOf((String) body.get("candidateId"));
+        JSONArray events_all= body.getJSONArray("events_all");
+        JSONArray events_latest= body.getJSONArray("events_latest");
+        Record record =recordRepository.findByCandidateId(candidateId);
+        if(record==null) {
+            record = new Record();
+            record.setEvents_all(events_all);
+            record.setEvents_latest(events_latest);
+            record.setCandidateId(candidateId);
+        }
+        else{
+            record.setCandidateId(candidateId);
+            record.setEvents_latest(events_latest);
+            record.setEvents_all(events_all);
+        }
+        recordRepository.save(record);
+        System.out.println("录像文件已更新");
+        return "test";
+    }
+    @RequestMapping("/examing/play_real_time")
+    @ResponseBody
+    public JSONArray playRealTime(@RequestParam("id") Integer candidateId){
+        Record record=recordRepository.findByCandidateId(candidateId);
+        if (record==null){
+            return null;
+        }
+        JSONArray events_latest=record.getEvents_latest();
+//        System.out.println(events_latest);
+        return events_latest;
+    }
+
+
 
 }

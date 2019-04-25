@@ -1,7 +1,5 @@
 package examsystem.controller;
 
-import com.sun.deploy.net.HttpRequest;
-import com.sun.deploy.net.HttpResponse;
 import examsystem.dao.CandidateRepository;
 import examsystem.entity.Candidate;
 import org.springframework.beans.factory.annotation.Autowired;
